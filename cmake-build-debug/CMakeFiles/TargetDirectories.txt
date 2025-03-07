@@ -1,0 +1,3 @@
+F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager/cmake-build-debug/CMakeFiles/Iftar_Invitation_Manager.dir
+F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager/cmake-build-debug/CMakeFiles/rebuild_cache.dir

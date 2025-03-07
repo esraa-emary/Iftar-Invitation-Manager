@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.27"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Iftar_Invitation_Manager",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Iftar_Invitation_Manager::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Iftar_Invitation_Manager-Debug-6247a52af8005f1b0c80.json",
+					"name" : "Iftar_Invitation_Manager",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager/cmake-build-debug",
+		"source" : "F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
