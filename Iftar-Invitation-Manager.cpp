@@ -169,11 +169,27 @@ void IftarManager::display_all_guests() {
 // < ============================== update_guest_invitation Function ============================== >
 
 void IftarManager::update_guest_invitation(string name, string new_date) {
-    for (int i = 0; i < this->size; i++) {
-        if (guestList[i].getName() == name) {
-            guestList[i].update_invitation(new_date);
-        }
+
+    bool found = false;
+
+    while (isValidName(new_date)) {
+        cout << "Invalid Date, it should be in the format YYYY-MM-DD." << endl;
+        cout << "Please, Enter a valid guest iftar date: ";
+        getline(cin, new_date);
     }
+
+    while (!found) {
+        for (int i = 0; i < this->size; i++) {
+            if (guestList[i].getName() == name) {
+                guestList[i].update_invitation(new_date);
+                found = true;
+            }
+        }
+        if (found) break ;
+        cout << "Please, Enter a valid name in Guests invitation List: ";
+        getline(cin, name);
+    }
+
     cout << "Updating invitation for " + name + "..." << endl << endl;
 }
 
@@ -196,7 +212,7 @@ int main() {
     auto manager = IftarManager();
     string name, newIftarDate, contact, iftarDate, date ;
 
-    cout << "Please, Enter guest name: ";
+    cout << " Please, Enter guest name: ";
     getline(cin, name);
     cout << "Please, Enter guest contact: ";
     getline(cin, contact);
