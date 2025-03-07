@@ -1,1 +1,1 @@
-# DataStructures_CS214_A1
+# Iftar Invitation Manager
