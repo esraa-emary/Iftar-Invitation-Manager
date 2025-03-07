@@ -26,6 +26,7 @@ class Guest {
 public:
     Guest() = default;
     Guest(string guestName, string guestContact, string guestIftar_date);
+    string getName();
     void display_guest();
     void update_invitation(string new_date);
 };
@@ -104,20 +105,24 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
         getline(cin, guestIftar_date);
     }
 }
-
+// <============================== get Name Function ============================== >
+string Guest::getName() {
+    return this->name;
+}
 // <============================== display_guest Function ============================== >
 
 void Guest::display_guest() {
-
+     cout << this->name << ", " << "Contact: " << this->contact << ", " << "Iftar Date: " << this->iftar_date << endl;
 }
 
 // <============================== update_invitation Function ============================== >
 
 void Guest::update_invitation(string new_date) {
-
+       this->iftar_date = new_date;
 }
 
 // < ============================== Implementation For Iftar Manager Class ============================== >
+
 // < ============================== add_guest Function ============================== >
 
 void IftarManager::add_guest(Guest guest) {
@@ -141,13 +146,20 @@ void IftarManager::add_guest(Guest guest) {
 // < ============================== display_all_guests Function ============================== >
 
 void IftarManager::display_all_guests() {
-
+    for (int i = 0; i < this->size; i++) {
+        cout << "Guest: " ; this->guestList[i].display_guest();
+    }
 }
 
 // < ============================== update_guest_invitation Function ============================== >
 
 void IftarManager::update_guest_invitation(string name, string new_date) {
 
+    for (int i = 0; i < this->size; i++) {
+        if (guestList[i].getName() == name) {
+            guestList[i].update_invitation(new_date);
+        }
+    }
     cout << "Updating invitation for " + name + "..." << endl;
 }
 
@@ -168,13 +180,13 @@ void IftarManager::sort_guest_list() {
 
 int main() {
     auto manager = IftarManager();
-    string name, newName, contact, iftarDate, date;
+    string name, newIftarDate, contact, iftarDate, date ;
 
-    cout << "Please, Enter guest name: ";
+    cout << " Please, Enter guest name: ";
     getline(cin, name);
     cout << "Please, Enter guest contact: ";
     getline(cin, contact);
-    cout << "Please, Enter guest iftar date: ";
+    cout << "Please, Enter guest iftar date should be in the format (YYYY-MM-DD): ";
     getline(cin, iftarDate);
     Guest guest(name, contact, iftarDate);
     manager.add_guest(guest);                           // Add guests
@@ -183,9 +195,9 @@ int main() {
 
     cout << "Please, Enter guest name: ";
     getline(cin, name);
-    cout << "Please, Enter guest's new name: ";
-    getline(cin, newName);
-    manager.update_guest_invitation(name, newName);   // Update invitation date for Omar
+    cout << "Please, Enter guest's new Date: ";
+    getline(cin, newIftarDate);
+    manager.update_guest_invitation(name, newIftarDate);   // Update invitation date for Omar
 
     manager.display_all_guests();               // Display the updated guest list
 
