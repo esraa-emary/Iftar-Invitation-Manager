@@ -32,6 +32,8 @@ class Guest {
     string contact;
     string iftar_date;
 public:
+    Guest() {}
+
     Guest(string guestName, string guestContact, string guestIftar_date);
 
     void display_guest();
@@ -42,10 +44,8 @@ public:
 
 // < ============================== Iftar Manager Class ============================== >
 class IftarManager {
-    Guest arr[1];
+    Guest guestList[100];
 public:
-    IftarManager();
-
     void add_guest(Guest guest);
 
     void display_all_guests();
