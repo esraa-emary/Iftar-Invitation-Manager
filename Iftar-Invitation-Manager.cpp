@@ -17,6 +17,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+bool isValidName(const string& name) {
+    // Regular expression for the name format (only letters and spaces).
+    regex namePattern("[A-Za-z ]+$");
+    return regex_match(name, namePattern);
+}
+
+bool isValidContact(const string& contact) {
+    // Regular expressions for the phone number and email formats respectively.
+    regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
+    regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
+    return regex_match(contact, emailPattern) || regex_match(contact, phoneNumberPattern);
+}
+
+bool isValidDate(const string& date) {
+    // Regular expression for the date format (YYYY-MM-DD).
+    regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
+
+    if (regex_match(date, datePattern)) {
+        // Last day of every month in a non-leap year (Note: The array is 1-based).
+        int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        // Extract year, month, and day from the date string.
+        int year = stoi(date.substr(0, 4));
+        int month = stoi(date.substr(5, 2));
+        int day = stoi(date.substr(8, 2));
+
+        // Adjust February for leap years.
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) daysInMonth[2] = 29;
+
+        if (day <= daysInMonth[month]) return true;
+    }
+    return false;
+}
+
 // < ============================== Guest Class ============================== >
 
 class Guest {
@@ -48,15 +82,9 @@ public:
 // < ============================== Constructor ============================== >
 
 Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
-    // Regular Expressions for phone number, email, and date.
-    regex namePattern("[A-Za-z ]+$");
-    regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
-    regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
-    regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
-
     // Check if the guest name is valid and assign it.
     while (true) {
-        if (regex_match(guestName, namePattern)) {
+        if (isValidName(guestName)) {
             this->name = guestName;
             break;
         }
@@ -68,7 +96,7 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
 
     // Check if the guest contact (phone number or email) is valid and assign it.
     while (true) {
-        if (regex_match(guestContact, phoneNumberPattern) || regex_match(guestContact, emailPattern)) {
+        if (isValidContact(guestContact)) {
             this->contact = guestContact;
             break;
         }
@@ -80,27 +108,12 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
 
     // Check if the guest iftar date is valid and assign it.
     while (true) {
-        if (regex_match(guestIftar_date, datePattern)) {
-            // Last day of every month in a non-leap year (Note: The array is 1-based).
-            int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-            // Extract year, month, and day from the date string.
-            int year = stoi(guestIftar_date.substr(0, 4));
-            int month = stoi(guestIftar_date.substr(5, 2));
-            int day = stoi(guestIftar_date.substr(8, 2));
-
-            // Adjust February for leap years.
-            if ((year %4 == 0 && year %100 != 0) || (year %400 == 0)) daysInMonth[2] = 29;
-
-            if (day <= daysInMonth[month]) {
-                this->iftar_date = guestIftar_date;
-                break;
-            }
-
-            else cout << "Invalid Date, it should be in the format YYYY-MM-DD." << endl;
+        if (isValidDate(guestIftar_date)) {
+            this->iftar_date = guestIftar_date;
+            break;
         }
-        else cout << "Invalid Date, it should be in the format YYYY-MM-DD." << endl;
 
+        cout << "Invalid Date, it should be in the format YYYY-MM-DD." << endl;
         cout << "Please, Enter a valid guest iftar date: ";
         getline(cin, guestIftar_date);
     }
@@ -161,7 +174,7 @@ void IftarManager::update_guest_invitation(string name, string new_date) {
             guestList[i].update_invitation(new_date);
         }
     }
-    cout << "Updating invitation for " + name + "..." << endl;
+    cout << "Updating invitation for " + name + "..." << endl << endl;
 }
 
 // < ============================== send_reminder Function ============================== >
