@@ -34,8 +34,8 @@ public:
 // < ============================== Iftar Manager Class ============================== >
 
 class IftarManager {
-    Guest* guestList;
-    int size;
+    Guest* guestList = new Guest[0];
+    int size = 0;
 public:
     void add_guest(Guest guest);
     void display_all_guests();
@@ -51,7 +51,7 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
     // Regular Expressions for phone number, email, and date.
     regex namePattern("[A-Za-z ]+$");
     regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
-    regex emailPattern("[A-Za-z0-9]+@(gmail|yahoo|outlook|hotmail)\\.com$");
+    regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
     regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
 
     // Check if the guest name is valid and assign it.
@@ -106,9 +106,11 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
     }
 }
 // <============================== get Name Function ============================== >
+
 string Guest::getName() {
     return this->name;
 }
+
 // <============================== display_guest Function ============================== >
 
 void Guest::display_guest() {
@@ -122,12 +124,11 @@ void Guest::update_invitation(string new_date) {
 }
 
 // < ============================== Implementation For Iftar Manager Class ============================== >
-
 // < ============================== add_guest Function ============================== >
 
 void IftarManager::add_guest(Guest guest) {
     // Create a new guest list with a size of one more than the current size.
-    Guest* newGuest = new Guest[this->size + 1];
+    auto* newGuest = new Guest[this->size + 1];
     for (int i = 0; i < this->size; i++) {
         newGuest[i] = this->guestList[i];
     }
@@ -149,12 +150,12 @@ void IftarManager::display_all_guests() {
     for (int i = 0; i < this->size; i++) {
         cout << "Guest: " ; this->guestList[i].display_guest();
     }
+    cout << endl;
 }
 
 // < ============================== update_guest_invitation Function ============================== >
 
 void IftarManager::update_guest_invitation(string name, string new_date) {
-
     for (int i = 0; i < this->size; i++) {
         if (guestList[i].getName() == name) {
             guestList[i].update_invitation(new_date);
@@ -182,7 +183,7 @@ int main() {
     auto manager = IftarManager();
     string name, newIftarDate, contact, iftarDate, date ;
 
-    cout << " Please, Enter guest name: ";
+    cout << "Please, Enter guest name: ";
     getline(cin, name);
     cout << "Please, Enter guest contact: ";
     getline(cin, contact);

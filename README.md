@@ -1,6 +1,5 @@
 # 🌙 Iftar Invitation Manager
 
-
 ## 📌 Overview
 **Iftar Invitation Manager** is a simple C++ program designed to manage guest invitations for Iftar gatherings. It allows users to add guests, update invitations, send reminders, and sort the guest list based on invitation dates.
 
@@ -15,7 +14,7 @@
 - **Language**: C++ (No STL used)
 
 ## 📖 Code Explanation
-### 🔹 **Guest Class** (`Guest.h`)
+### 🔹 **Guest Class**
 Manages guest details including:
 - **Attributes**: Name, Contact, Iftar Date
 - **Methods**:
@@ -35,7 +34,7 @@ public:
 };
 ```
 
-### 🔹 **IftarManager Class** (`IftarManager.h`)
+### 🔹 **IftarManager Class**
 Handles the list of guests and provides functions to:
 - Add and display guests
 - Update invitations
