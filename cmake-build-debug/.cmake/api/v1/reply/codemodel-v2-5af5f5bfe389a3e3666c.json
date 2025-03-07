@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager/cmake-build-debug",
-		"source" : "F:/FCAI/Second year assignment/Second term/data structure/assignment 1/iftar manager/Iftar-Invitation-Manager"
+		"build" : "C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Iftar-Invitation-Manager/cmake-build-debug",
+		"source" : "C:/Users/fr/OneDrive/Desktop/Data Structures Assignments/Assignment 1/Iftar-Invitation-Manager"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 6
+		"minor" : 7
 	}
 }
