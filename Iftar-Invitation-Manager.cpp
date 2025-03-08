@@ -11,6 +11,7 @@
                 display it and edit the date of invitation.
  * Version: V1.0
 */
+
 // < ========================================================================================== >
 #include <bits/stdc++.h>
 using namespace std;
@@ -64,6 +65,7 @@ class IftarManager {
     Guest* guestList = new Guest[0];
     int size = 0;
 public:
+    ~IftarManager();
     void add_guest(Guest guest);
     void display_all_guests();
     void update_guest_invitation(string name, string new_date);
@@ -260,52 +262,39 @@ void IftarManager::Help_Merge_sorting(Guest *Temp, int Left, int Right) {
 void IftarManager::sort_guest_list(){
     Help_Merge_sorting(this->guestList , 0, this-> size - 1);
 }
+IftarManager::~IftarManager() {
+    delete[] guestList;
+}
+
+
 // < ============================== Main Function ============================== >
 int main() {
+
+    cout << endl << " ******************  Welcome to Iftar Manager ******************"  << endl;
+    // Create Iftar Manager
     auto manager = IftarManager();
-    string name, newIftarDate, contact, iftarDate, date ;
-    string guestNames[19] = {
-            "Mahmoud Ashraf", "Ali Hassan", "Sara Ahmed", "Omar Khaled", "Fatima Noor",
-            "Ahmed Tarek", "Hassan Omar", "Mariam Youssef", "Youssef Sami", "Kareem Adel",
-            "Nourhan Gamal", "Bassem Mohamed", "Laila Hossam", "Amr Salah", "Zainab Mostafa",
-            "George Malak", "Mohamed Atef", "George Malak", "Mohamed Adel"
-    };
-    string contactNumbers[19] = {
-            "01224577895", "01112345678", "01098765432", "01555512345", "01020304050",
-            "01234567890", "01155667788", "01066778899", "01511223344", "01099988877",
-            "01122334455", "01233445566", "01566778899", "01010101010", "01212121212",
-            "01245788973", "01224577894", "01226080917", "01224578963"
-    };
-    string dates[19] = {
-            "2020-12-12", "2023-05-10", "2022-10-20", "2023-03-15", "2021-12-30",
-            "2020-06-25", "2024-01-01", "2022-10-20", "2023-05-10", "2020-12-12",
-            "2021-06-15", "2023-07-22", "2023-03-15", "2024-06-05", "2022-08-19",
-            "2025-08-04", "2025-11-26", "2025-5-22", "2025-09-30"
-    };
-    for (int i = 0; i < 19 ; ++i) {
-        Guest guest(guestNames[i], contactNumbers[i], dates[i]);
-        manager.add_guest(guest);
-    }
-//        cout << " Please, Enter guest name: ";
-//        getline(cin, name);
-//        cin.ignore();
-//        cout << "Please, Enter guest contact: ";
-//        getline(cin, contact);
-//        cin.ignore();
-//        cout << "Please, Enter guest iftar date should be in the format (YYYY-MM-DD): ";
-//        getline(cin, iftarDate);
-//        cin.ignore();
-//        Guest guest(name, contact, iftarDate);
-//        manager.add_guest(guest);                           // Add guests
-    manager.display_all_guests();                       // Display the guest list
-     cout << "Please, Enter guest name: ";
-     getline(cin, name);
-     cout << "Please, Enter guest's new Date: ";
-     getline(cin, newIftarDate);
-     manager.update_guest_invitation(name, newIftarDate);   // Update invitation date for Omar
-    manager.display_all_guests();               // Display the updated guest list
-    cout << "Please, Enter date to send reminders: ";
-    getline(cin, date);
-    manager.send_reminder(date);                   // Send reminders
+
+    // Add guests
+    Guest guest1 = Guest("Mariam", "mariam@yahoo.com", "2025-03-15");
+    Guest guest2 = Guest("Esraa", "esraa@gmail.com", "2025-03-18");
+    Guest guest3 = Guest("Zainab", "zainab@outlook.com", "2025-03-20");
+    Guest guest4 = Guest("manar", "manar@hotmail.com", "2025-03-20");
+
+    manager.add_guest(guest1);
+    manager.add_guest(guest2);
+    manager.add_guest(guest3);
+    manager.add_guest(guest4);
+
+    // Display guest list
+    manager.display_all_guests();
+
+    // Update invitation date for Omar
+    manager.update_guest_invitation("manar", "2025-03-15");
+
+    // Display updated guest list
+    manager.display_all_guests();
+
+    // Send reminders
+    manager.send_reminder("2025-03-15");
     return 0;
 }
