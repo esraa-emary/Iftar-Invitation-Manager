@@ -15,17 +15,20 @@
 // < ========================================================================================== >
 #include <bits/stdc++.h>
 using namespace std;
+
 bool isValidName(const string& name) {
     // Regular expression for the name format (only letters and spaces).
     regex namePattern("[A-Za-z ]+$");
     return regex_match(name, namePattern);
 }
+
 bool isValidContact(const string& contact) {
     // Regular expressions for the phone number and email formats respectively.
     regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
     regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
     return regex_match(contact, emailPattern) || regex_match(contact, phoneNumberPattern);
 }
+
 bool isValidDate(const string& date) {
     // Regular expression for the date format (YYYY-MM-DD).
     regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
@@ -46,7 +49,9 @@ bool isValidDate(const string& date) {
     }
     return false;
 }
+
 // < ============================== Guest Class ============================== >
+
 class Guest {
     string name;
     string contact;
@@ -60,7 +65,9 @@ public:
     void update_invitation(string new_date);
     bool operator < ( Guest& other)  ;
 };
+
 // < ============================== Iftar Manager Class ============================== >
+
 class IftarManager {
     Guest* guestList = new Guest[0];
     int size = 0;
@@ -74,6 +81,7 @@ public:
     void Merge(Guest* Guest_List_sort,  int Right, int Middle, int Left);
     void Help_Merge_sorting(Guest *Temp, int Left, int Right);
 };
+
 // < ============================== Implementation For Guest Class ============================== >
 // < ============================== Constructor ============================== >
 Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
@@ -113,22 +121,27 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
         getline(cin, guestIftar_date);
     }
 }
+
 // <============================== get Name Function ============================== >
 string Guest::getName() {
     return this->name;
 }
+
 // <============================== get Date Function ============================== >
 string Guest::getDate() {
     return this->iftar_date ;
 }
+
 // <============================== display_guest Function ============================== >
 void Guest::display_guest() {
      cout << this->name << ", " << "Contact: " << this->contact << ", " << "Iftar Date: " << this->iftar_date << endl;
 }
+
 // <============================== update_invitation Function ============================== >
 void Guest::update_invitation(string new_date) {
        this->iftar_date = new_date;
 }
+
 // <============================== Overloading Function ============================== >
 bool Guest::operator < ( Guest &other){
     int TempYear1 = stoi( getDate().substr(0,4))
@@ -145,6 +158,7 @@ bool Guest::operator < ( Guest &other){
 
     return this-> name < other.name ;
 }
+
 // < ============================== Implementation For Iftar Manager Class ============================== >
 // < ============================== add_guest Function ============================== >
 void IftarManager::add_guest(Guest guest) {
@@ -153,16 +167,19 @@ void IftarManager::add_guest(Guest guest) {
     for (int i = 0; i < this->size; i++) {
         newGuest[i] = this->guestList[i];
     }
+   
     // Delete the old guest list and assign the new guest list.
     newGuest[this->size] = guest;
     if (this->guestList) {
         delete[] this->guestList;
     }
+   
     // Add the new guest to the list and increment the size.
     this->guestList = newGuest;
     this->size++;
     sort_guest_list();      // Sort the guest list after adding a new guest.
 }
+
 // < ============================== display_all_guests Function ============================== >
 void IftarManager::display_all_guests() {
     for (int i = 0; i < this->size; i++) {
@@ -170,9 +187,9 @@ void IftarManager::display_all_guests() {
     }
     cout << endl;
 }
+
 // < ============================== update_guest_invitation Function ============================== >
 void IftarManager::update_guest_invitation(string name, string new_date) {
-
     bool found = false;
 
     while (isValidName(new_date)) {
@@ -188,13 +205,14 @@ void IftarManager::update_guest_invitation(string name, string new_date) {
                 found = true;
             }
         }
-        if (found) break ;
+        if (found) break;
         cout << "Please, Enter a valid name in Guests invitation List: ";
         getline(cin, name);
     }
 
     cout << "Updating invitation for " + name + "..." << endl << endl;
 }
+
 // < ============================== send_reminder Function ============================== >
 void IftarManager::send_reminder(string date) {
     while (true) {
@@ -211,30 +229,34 @@ void IftarManager::send_reminder(string date) {
                 cout <<"No Guest has this Iftar date " << endl << endl;
             }
             break;
-        }if (!isValidDate(date)) {
+        }
+       if (!isValidDate(date)) {
             cout <<"Please enter a valid date : ";
             getline(cin, date);
         }
     }
-
 }
+
 // < ============================== sort_guest_list With Merge Function ============================== >
 void IftarManager::Merge(Guest* GS, int Left, int Middle, int Right ) {
     int SizeArr1 = Middle - Left + 1;
     int SizeArr2 = Right - Middle;
     Guest Arr1[SizeArr1] , Arr2[SizeArr2] ;
-    for (int i = 0; i < SizeArr1 ; ++i) {
+    
+   for (int i = 0; i < SizeArr1 ; ++i) {
         Arr1[i] = GS[Left + i];
     }
     for (int i = 0; i < SizeArr2 ; ++i) {
         Arr2[i] = GS[Middle + 1 + i];
     }
-    int StartArr1 = 0 , StartArr2 = 0 , TempLeft = Left;
-    while((StartArr1 < SizeArr1) && (StartArr2 < SizeArr2)){
-        if( Arr1[StartArr1] < Arr2[StartArr2]){
+   
+    int StartArr1 = 0 , StartArr2 = 0 , TempLeft = Left; 
+   while((StartArr1 < SizeArr1) && (StartArr2 < SizeArr2)){
+        if (Arr1[StartArr1] < Arr2[StartArr2]){
             GS[TempLeft] = Arr1[StartArr1];
             ++StartArr1;
-        }else{
+        }
+        else {
             GS[TempLeft] = Arr2[StartArr2];
             ++StartArr2;
         }
@@ -251,6 +273,7 @@ void IftarManager::Merge(Guest* GS, int Left, int Middle, int Right ) {
         ++TempLeft;
     }
 }
+
 void IftarManager::Help_Merge_sorting(Guest *Temp, int Left, int Right) {
     if(Left < Right){
         int Middle = (Left + Right) / 2 ;
@@ -259,17 +282,17 @@ void IftarManager::Help_Merge_sorting(Guest *Temp, int Left, int Right) {
         Merge(Temp, Left, Middle, Right);
     }
 }
+
 void IftarManager::sort_guest_list(){
     Help_Merge_sorting(this->guestList , 0, this-> size - 1);
 }
+
 IftarManager::~IftarManager() {
     delete[] guestList;
 }
 
-
 // < ============================== Main Function ============================== >
 int main() {
-
     cout << endl << " ******************  Welcome to Iftar Manager ******************"  << endl;
     // Create Iftar Manager
     auto manager = IftarManager();
@@ -278,7 +301,7 @@ int main() {
     Guest guest1 = Guest("Mariam", "mariam@yahoo.com", "2025-03-15");
     Guest guest2 = Guest("Esraa", "esraa@gmail.com", "2025-03-18");
     Guest guest3 = Guest("Zainab", "zainab@outlook.com", "2025-03-20");
-    Guest guest4 = Guest("manar", "manar@hotmail.com", "2025-03-20");
+    Guest guest4 = Guest("Manar", "manar@hotmail.com", "2025-03-20");
 
     manager.add_guest(guest1);
     manager.add_guest(guest2);
@@ -289,7 +312,7 @@ int main() {
     manager.display_all_guests();
 
     // Update invitation date for Omar
-    manager.update_guest_invitation("manar", "2025-03-15");
+    manager.update_guest_invitation("Manar", "2025-03-15");
 
     // Display updated guest list
     manager.display_all_guests();
