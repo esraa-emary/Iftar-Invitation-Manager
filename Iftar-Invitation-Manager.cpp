@@ -61,6 +61,8 @@ public:
     Guest() = default;
     Guest(string guestName, string guestContact, string guestIftar_date);
     string getName();
+    string getDate();
+    string getContact();
     void display_guest();
     void update_invitation(string new_date);
 };
@@ -123,9 +125,15 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
 string Guest::getName() {
     return this->name;
 }
-
+// <============================== get Date Function ============================== >
+string Guest::getDate() {
+    return this->iftar_date ;
+}
+// <============================== get contact Function ============================== >
+string Guest::getContact() {
+    return this->contact ;
+}
 // <============================== display_guest Function ============================== >
-
 void Guest::display_guest() {
      cout << this->name << ", " << "Contact: " << this->contact << ", " << "Iftar Date: " << this->iftar_date << endl;
 }
@@ -196,8 +204,16 @@ void IftarManager::update_guest_invitation(string name, string new_date) {
 // < ============================== send_reminder Function ============================== >
 
 void IftarManager::send_reminder(string date) {
-
-    cout << "Sending reminders... " << endl;
+    bool found = false;
+    for (int i = 0; i < this->size; i++) {
+        if (this->guestList[i].getDate() == date) {
+            found = true;
+            cout << "To: " << this->guestList[i].getContact() << "...Reminder your Iftar date: " << date << endl; ;
+        }
+    }
+    if (found == false) {
+        cout <<"No Guest has this Iftar date " << endl << endl;
+    }
 }
 
 // < ============================== sort_guest_list Function ============================== >
@@ -223,11 +239,11 @@ int main() {
 
     manager.display_all_guests();                       // Display the guest list
 
-    cout << "Please, Enter guest name: ";
-    getline(cin, name);
-    cout << "Please, Enter guest's new Date: ";
-    getline(cin, newIftarDate);
-    manager.update_guest_invitation(name, newIftarDate);   // Update invitation date for Omar
+    // cout << "Please, Enter guest name: ";
+    // getline(cin, name);
+    // cout << "Please, Enter guest's new Date: ";
+    // getline(cin, newIftarDate);
+    // manager.update_guest_invitation(name, newIftarDate);   // Update invitation date for Omar
 
     manager.display_all_guests();               // Display the updated guest list
 
