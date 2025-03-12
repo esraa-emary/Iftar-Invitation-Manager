@@ -33,6 +33,7 @@ public:
     void display_guest();
     void update_invitation(string new_date);
     bool operator < ( Guest& other)  ;
+    bool operator == ( Guest& other)  ;
 };
 // < ============================== Iftar Manager Class ============================== >
 class IftarManager {
@@ -120,6 +121,13 @@ bool Guest::operator < ( Guest &other){
     if (Tempday1 != Tempday2) return Tempday1 < Tempday2;
 
     return this-> name < other.name ;
+}
+
+bool Guest::operator == ( Guest& other) {
+    if(this-> name != other.name) return false ;
+    if(this-> contact != other.contact) return false ;
+    if(this-> iftar_date != other.iftar_date) return false ;
+    else return true;
 }
 // < ============================== Implementation For Iftar Manager Class ============================== >
 // < ============================== add_guest Function ============================== >
@@ -245,8 +253,19 @@ void IftarManager::sort_guest_list(){
 }
 // < ============================== remove Function ============================== >
 void IftarManager::remove_guest(Guest guest) {
-
-    // Implement
+    cout << guest.getName() << " is being removed from the Iftar invitation list...." << endl ;
+    Guest * Temp_list = new Guest [size - 1] ;
+    int temp_ind = 0 ;
+    for (int i = 0; i < this->size ; ++i) {
+        if(guest == this->guestList[i])
+            continue;
+        else {
+            Temp_list[temp_ind++] = this->guestList[i];
+        }
+    }
+    delete [] this->guestList;
+    this->guestList = Temp_list ;
+    --size;
 }
 
 IftarManager::~IftarManager() {
@@ -284,6 +303,8 @@ int main() {
             cin >> choice ;
         }
         cout << endl ;
+        // system cls must be clear the screen but it work on the terminal only.
+//        system("cls");
         switch (choice) {
             case 1:
 
