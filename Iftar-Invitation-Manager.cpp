@@ -16,6 +16,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// < ===============Current Date=============== >
+const string current_date = "2025-03-13" ;
+
+
 bool isValidName(const string& name) {
     // Regular expression for the name format (only letters and spaces).
     const regex namePattern("[A-Za-z ]+$");
@@ -237,9 +241,12 @@ void IftarManager::send_reminder(string date) const{
             cout << "Sending Reminder..." << endl;
 
             for (int i = 0; i < this->size; i++) {
-                if (this->guestList[i].getDate() == date) {
+                if (this->guestList[i].getDate() == date ) {
                     found = true;
-                    cout << "Reminder sent to " << guestList[i].getName() << ": Your Iftar invitation is on " << date << "!" << endl;
+                    if (date > current_date) {
+                        cout << "Reminder sent to " << guestList[i].getName() << ": Your Iftar invitation is on " << date << "!" << endl;
+                    }else
+                        cout << "this date is gone !" << endl << endl;
                 }
             }
             if (!found) {
@@ -247,10 +254,8 @@ void IftarManager::send_reminder(string date) const{
             }
             break;
         }
-        else {
-            cout << "Please enter a valid date : ";
-            getline(cin, date);
-        }
+        cout << "Please enter a valid date : ";
+        getline(cin, date);
     }
     cout << endl ;
 }
