@@ -15,11 +15,6 @@
 
 ## 📖 Code Explanation
 ### 🔹 **Guest Class**
-Manages guest details including:
-- **Attributes**: Name, Contact, Iftar Date
-- **Methods**:
-    - `display_guest()`: Displays guest details.
-    - `update_invitation(new_date)`: Updates the Iftar date.
 
 ```cpp
 class Guest {
@@ -29,8 +24,12 @@ class Guest {
 public:
     Guest() = default;
     Guest(string guestName, string guestContact, string guestIftar_date);
-    void display_guest();
-    void update_invitation(string new_date);
+    string getName();
+    string getDate();
+    void display_guest() const;
+    void update_invitation(const string &new_date);
+    bool operator < ( Guest& other);
+    bool operator == (const Guest& other) const;
 };
 ```
 
@@ -43,14 +42,18 @@ Handles the list of guests and provides functions to:
 
 ```cpp
 class IftarManager {
-    Guest* guestList;
-    int size;
+    Guest* guestList = new Guest[0];
+    int size = 0;
 public:
-    void add_guest(Guest guest);
-    void display_all_guests();
+    ~IftarManager();
+    void add_guest(const Guest &guest);
+    void remove_guest(const Guest &guest );
+    void display_all_guests() const;
     void update_guest_invitation(string name, string new_date);
-    void send_reminder(string date);
+    void send_reminder(string date) const;
     void sort_guest_list();
+    void Merge(Guest* Guest_List_sort,  int Right, int Middle, int Left);
+    void Help_Merge_sorting(Guest *Temp, int Left, int Right);
 };
 ```
 
