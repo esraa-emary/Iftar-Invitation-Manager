@@ -14,26 +14,29 @@
 // < ========================================================================================== >
 
 #include <bits/stdc++.h>
+
 using namespace std;
 
-// < ===============Current Date=============== >
-const string current_date = "2025-03-13" ;
+// ----------------------------------------------- CURRENT DATE
 
+const string current_date = "2025-03-24";
 
-bool isValidName(const string& name) {
+// ----------------------------------------------- HELPER FUNCTIONS
+
+bool isValidName(const string &name) {
     // Regular expression for the name format (only letters and spaces).
     const regex namePattern("[A-Za-z ]+$");
     return regex_match(name, namePattern);
 }
 
-bool isValidContact(const string& contact) {
+bool isValidContact(const string &contact) {
     // Regular expressions for the phone number and email formats respectively.
     const regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
-    const regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
+    const regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail|example)\\.com$");
     return regex_match(contact, emailPattern) || regex_match(contact, phoneNumberPattern);
 }
 
-bool isValidDate(const string& date) {
+bool isValidDate(const string &date) {
     // Regular expression for the date format (YYYY-MM-DD).
     const regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
 
@@ -54,41 +57,54 @@ bool isValidDate(const string& date) {
     return false;
 }
 
-// < ============================== Guest Class ============================== >
+// ----------------------------------------------- GUEST CLASS
+
 class Guest {
     string name;
     string contact;
     string iftar_date;
+
 public:
     Guest() = default;
     Guest(string guestName, string guestContact, string guestIftar_date);
-    string getName();
-    string getDate();
+
     void display_guest() const;
     void update_invitation(const string &new_date);
-    bool operator < ( Guest& other);
-    bool operator == (const Guest& other) const;
+
+    // getters.
+    string getName();
+    string getDate();
+
+    // operator overloading.
+    bool operator<(Guest &other);
+    bool operator==(const Guest &other) const;
 };
 
-// < ============================== Iftar Manager Class ============================== >
+// ----------------------------------------------- IFTAR MANAGER CLASS
+
 class IftarManager {
-    Guest* guestList = new Guest[0];
-    int size = 0;
+    Guest *guestList = new Guest[0];
+    int no_guests = 0;
+
+    void Merge(Guest *Guest_List_sort, int Right, int Middle, int Left);
+    void Help_Merge_sorting(Guest *Temp, int Left, int Right);
+
 public:
     ~IftarManager();
     void add_guest(const Guest &guest);
-    void remove_guest(const Guest &guest );
+    void remove_guest(const Guest &guest);
+//    void remove_guest(const string &name);
+
     void display_all_guests() const;
     void update_guest_invitation(string name, string new_date);
     void send_reminder(string date) const;
     void sort_guest_list();
-    void Merge(Guest* Guest_List_sort,  int Right, int Middle, int Left);
-    void Help_Merge_sorting(Guest *Temp, int Left, int Right);
 };
 
-// < ============================== Implementation For Guest Class ============================== >
+// ----------------------------------------------- IMPLEMENTATION FOR GUEST CLASS
 
-// < ============================== Constructor ============================== >
+// ----------------------------------------------- CONSTRUCTOR
+
 Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
     // Check if the guest name is valid and assign it.
     while (true) {
@@ -127,85 +143,91 @@ Guest::Guest(string guestName, string guestContact, string guestIftar_date) {
     }
 }
 
-// <============================== get Name Function ============================== >
+// ----------------------------------------------- GETTERS FUNCTIONS
+
 string Guest::getName() {
     return this->name;
 }
 
-// <============================== get Date Function ============================== >
 string Guest::getDate() {
-    return this->iftar_date ;
+    return this->iftar_date;
 }
 
-// <============================== display_guest Function ============================== >
-void Guest::display_guest() const{
-     cout << this->name << ", " << "Contact: " << this->contact << ", " << "Iftar Date: " << this->iftar_date << endl;
+// ----------------------------------------------- DISPLAY GUEST FUNCTION
+
+void Guest::display_guest() const {
+    cout << this->name << ", " << "Contact: " << this->contact << ", " << "Iftar Date: " << this->iftar_date << endl;
 }
 
-// <============================== update_invitation Function ============================== >
+// ----------------------------------------------- UPDATE INVITATION FUNCTION
+
 void Guest::update_invitation(const string &new_date) {
-       this->iftar_date = new_date;
+    this->iftar_date = new_date;
 }
 
-// <============================== Overloading Function ============================== >
-bool Guest::operator < ( Guest &other){
-    // Extract year, month, and day from the date string of both guests to compare them.
-    const int tempYear1 = stoi( getDate().substr(0,4));
-    const int tempMonth1 = stoi(getDate().substr(5,2));
-    int tempDay1 = stoi(getDate().substr(8,2)) ;
+// ----------------------------------------------- OVERLOADING FUNCTIONS
 
-    const int tempYear2 = stoi(other.getDate().substr(0,4));
-    const int tempMonth2 = stoi(other.getDate().substr(5,2));
-    int tempDay2 = stoi(other.getDate().substr(8,2)) ;
+bool Guest::operator<(Guest &other) {
+    // Extract year, month, and day from the date string of both guests to compare them.
+    const int tempYear1 = stoi(getDate().substr(0, 4));
+    const int tempMonth1 = stoi(getDate().substr(5, 2));
+    int tempDay1 = stoi(getDate().substr(8, 2));
+
+    const int tempYear2 = stoi(other.getDate().substr(0, 4));
+    const int tempMonth2 = stoi(other.getDate().substr(5, 2));
+    int tempDay2 = stoi(other.getDate().substr(8, 2));
 
     // Compare the dates of the two guests.
     if (tempYear1 != tempYear2) return tempYear1 < tempYear2;
     if (tempMonth1 != tempMonth2) return tempMonth1 < tempMonth2;
     if (tempDay1 != tempDay2) return tempDay1 < tempDay2;
 
-    return this-> name < other.name ;
+    return this->name < other.name;
 }
 
-bool Guest::operator == (const Guest& other) const{
+bool Guest::operator==(const Guest &other) const {
     return (this->name == other.name && this->contact == other.contact && this->iftar_date == other.iftar_date);
 }
 
-// < ============================== Implementation For Iftar Manager Class ============================== >
+// ----------------------------------------------- IMPLEMENTATION FOR IFTAR MANAGER CLASS
 
-// < ============================== add_guest Function ============================== >
+// ----------------------------------------------- ADD GUEST FUNCTION
+
 void IftarManager::add_guest(const Guest &guest) {
     // Create a new guest list with a size of one more than the current size.
-    auto* newGuest = new Guest[this->size + 1];
-    for (int i = 0; i < this->size; i++) {
+    auto *newGuest = new Guest[this->no_guests + 1];
+    for (int i = 0; i < this->no_guests; i++) {
         newGuest[i] = this->guestList[i];
     }
 
     // Delete the old guest list and assign the new guest list.
-    newGuest[this->size] = guest;
+    newGuest[this->no_guests] = guest;
     delete[] this->guestList;
 
     // Add the new guest to the list and increment the size.
     this->guestList = newGuest;
-    this->size++;
+    this->no_guests++;
     sort_guest_list();      // Sort the guest list after adding a new guest.
 }
 
-// < ============================== display_all_guests Function ============================== >
-void IftarManager::display_all_guests() const{
-    if (this->size == 0) {
+// ----------------------------------------------- DISPLAY ALL GUESTS FUNCTION
+
+void IftarManager::display_all_guests() const {
+    if (this->no_guests == 0) {
         cout << "No Guests to Print. " << endl;
-    }
-    else {
-        for (int i = 0; i < this->size; i++) {
-            cout << "Guest: " ; this->guestList[i].display_guest();
+    } else {
+        for (int i = 0; i < this->no_guests; i++) {
+            cout << "Guest: ";
+            this->guestList[i].display_guest();
         }
         cout << endl;
     }
 }
 
-// < ============================== update_guest_invitation Function ============================== >
+// ----------------------------------------------- UPDATE GUEST INVITATION FUNCTION
+
 void IftarManager::update_guest_invitation(string name, string new_date) {
-    if (this->size == 0) {
+    if (this->no_guests == 0) {
         cout << "There is no guest to remove." << endl;
         return;
     }
@@ -218,13 +240,13 @@ void IftarManager::update_guest_invitation(string name, string new_date) {
     }
 
     while (true) {
-        for (int i = 0; i < this->size; i++) {
+        for (int i = 0; i < this->no_guests; i++) {
             if (guestList[i].getName() == name) {
                 guestList[i].update_invitation(new_date);
                 found = true;
             }
         }
-        if (found) break ;
+        if (found) break;
         cout << "Please, Enter a valid name in Guests invitation List: ";
         getline(cin, name);
     }
@@ -233,20 +255,24 @@ void IftarManager::update_guest_invitation(string name, string new_date) {
     sort_guest_list();      // Sort the guest list after updating the guest's date.
 }
 
-// < ============================== send_reminder Function ============================== >
-void IftarManager::send_reminder(string date) const{
+// ----------------------------------------------- SEND REMINDER FUNCTION
+
+void IftarManager::send_reminder(string date) const {
     while (true) {
         if (isValidDate(date)) {
             bool found = false;
             cout << "Sending Reminder..." << endl;
 
-            for (int i = 0; i < this->size; i++) {
-                if (this->guestList[i].getDate() == date ) {
+            for (int i = 0; i < this->no_guests; i++) {
+                if (this->guestList[i].getDate() == date) {
                     found = true;
-                    if (date > current_date) {
-                        cout << "Reminder sent to " << guestList[i].getName() << ": Your Iftar invitation is on " << date << "!" << endl;
-                    }else
-                        cout << "this date is gone !" << endl << endl;
+                    cout << "Reminder sent to " << guestList[i].getName() << ": Your Iftar invitation is on "
+                         << date << "!" << endl;
+
+//                    if (date > current_date) {
+//                        cout << "Reminder sent to " << guestList[i].getName() << ": Your Iftar invitation is on "
+//                             << date << "!" << endl;
+//                    } else cout << "this date is gone !" << endl << endl;
                 }
             }
             if (!found) {
@@ -257,28 +283,29 @@ void IftarManager::send_reminder(string date) const{
         cout << "Please enter a valid date : ";
         getline(cin, date);
     }
-    cout << endl ;
+    cout << "\nMay your Iftar gatherings be full of warmth and blessings!" << endl;
 }
 
-// < ============================== sort_guest_list With Merge Function ============================== >
-void IftarManager::Merge(Guest* GS, int Left, int Middle, int Right ) {
+// ----------------------------------------------- SORT GUEST LIST WITH MERGE FUNCTION
+
+void IftarManager::Merge(Guest *GS, int Left, int Middle, int Right) {
     const int SizeArr1 = Middle - Left + 1;
     const int SizeArr2 = Right - Middle;
-    Guest Arr1[SizeArr1] , Arr2[SizeArr2] ;
-    for (int i = 0; i < SizeArr1 ; ++i) {
+    Guest Arr1[SizeArr1], Arr2[SizeArr2];
+    for (int i = 0; i < SizeArr1; ++i) {
         Arr1[i] = GS[Left + i];
     }
-    for (int i = 0; i < SizeArr2 ; ++i) {
+    for (int i = 0; i < SizeArr2; ++i) {
         Arr2[i] = GS[Middle + 1 + i];
     }
 
     // Merge the two arrays into GS [Left, Right].
-    int StartArr1 = 0 , StartArr2 = 0 , TempLeft = Left;
-    while((StartArr1 < SizeArr1) && (StartArr2 < SizeArr2)){
-        if( Arr1[StartArr1] < Arr2[StartArr2]){
+    int StartArr1 = 0, StartArr2 = 0, TempLeft = Left;
+    while ((StartArr1 < SizeArr1) && (StartArr2 < SizeArr2)) {
+        if (Arr1[StartArr1] < Arr2[StartArr2]) {
             GS[TempLeft] = Arr1[StartArr1];
             ++StartArr1;
-        }else{
+        } else {
             GS[TempLeft] = Arr2[StartArr2];
             ++StartArr2;
         }
@@ -286,12 +313,12 @@ void IftarManager::Merge(Guest* GS, int Left, int Middle, int Right ) {
     }
 
     // Copy the remaining elements of Arr1 and Arr2 if there are any.
-    while(StartArr1 < SizeArr1){
+    while (StartArr1 < SizeArr1) {
         GS[TempLeft] = Arr1[StartArr1];
         ++StartArr1;
         ++TempLeft;
     }
-    while (StartArr2 < SizeArr2){
+    while (StartArr2 < SizeArr2) {
         GS[TempLeft] = Arr2[StartArr2];
         ++StartArr2;
         ++TempLeft;
@@ -299,69 +326,72 @@ void IftarManager::Merge(Guest* GS, int Left, int Middle, int Right ) {
 }
 
 void IftarManager::Help_Merge_sorting(Guest *Temp, int Left, int Right) {
-    if (Left < Right){
-        const int Middle = Left + (Right - Left) / 2 ;
+    if (Left < Right) {
+        const int Middle = Left + (Right - Left) / 2;
         Help_Merge_sorting(Temp, Left, Middle);
         Help_Merge_sorting(Temp, Middle + 1, Right);
         Merge(Temp, Left, Middle, Right);
     }
 }
 
-void IftarManager::sort_guest_list(){
-    Help_Merge_sorting(this->guestList , 0, this-> size - 1);
+void IftarManager::sort_guest_list() {
+    Help_Merge_sorting(this->guestList, 0, this->no_guests - 1);
 }
 
-// < ============================== remove Function ============================== >
+// ----------------------------------------------- REMOVE FUNCTION
+
 void IftarManager::remove_guest(const Guest &guest) {
-    if (this->size == 0) {
+    if (this->no_guests == 0) {
         cout << "There is no guest to remove." << endl;
         return;
     }
 
-    bool found = false; string name , contact , date ;
-    auto * Temp_list = new Guest [size - 1] ;
-    int temp_ind = 0 ;
+    bool found = false;
+    string name, contact, date;
+    auto *Temp_list = new Guest[no_guests - 1];
+    int temp_ind = 0;
 
     while (true) {
-        for (int i = 0; i < this->size; i++) {
+        for (int i = 0; i < this->no_guests; i++) {
             if (guestList[i] == guest) {
                 found = true;
-            }
-            else {
+            } else {
                 Temp_list[temp_ind++] = this->guestList[i];
             }
         }
 
-        if (found) break ;
+        if (found) break;
 
-        cout << "Please, Enter a valid Guest in Guests invitation List "<< endl;
+        cout << "Please, Enter a valid Guest in Guests invitation List " << endl;
         cin.ignore();
-        cout << "Please, enter name of guest: " ; getline(cin, name) ;
-        cout << "Please, enter contact(email or phone number) of guest: "; getline(cin, contact) ;
-        cout << "Please, enter invitation date (YYYY-MM-DD) of guest: " ; getline(cin, date);
+        cout << "Please, enter name of guest: ";
+        getline(cin, name);
+        cout << "Please, enter contact(email or phone number) of guest: ";
+        getline(cin, contact);
+        cout << "Please, enter invitation date (YYYY-MM-DD) of guest: ";
+        getline(cin, date);
     }
 
-    delete [] this->guestList;
-    this->guestList = Temp_list ;
-    --this->size;
-    cout << "Guest is removed from the Iftar invitation list...." << endl ;
+    delete[] this->guestList;
+    this->guestList = Temp_list;
+    --this->no_guests;
+    cout << "Guest is removed from the Iftar invitation list...." << endl;
 }
+
+// ----------------------------------------------- DESTRUCTOR
 
 IftarManager::~IftarManager() {
     delete[] guestList;
 }
 
-// < ============================== Main Function ============================== >
-int main() {
+// ----------------------------------------------- ANOTHER SOME HELPER FUNCTIONS
 
-    cout << endl << " ------------------  Welcome to Iftar Invitation Manager ------------------"  << endl << endl;
-
+void runFromTerminal() {
     IftarManager manager = IftarManager();
-
     while (true) {
-        string name , date , contact , guestName , new_date , reminder;
-        long long numOfGuests ;
-        int choice ;
+        string name, date, contact, guestName, new_date, reminder;
+        long long numOfGuests;
+        int choice;
 
         cout << "1) Add new guest." << endl;
         cout << "2) Remove guest." << endl;
@@ -371,39 +401,42 @@ int main() {
         cout << "6) Exit." << endl;
 
         cout << endl << "Please, Select an option:";
-        cin >> choice ;
+        cin >> choice;
 
         while (cin.fail() || choice < 1 || choice > 6) {
             cout << "Invalid choice, \nPlease, enter valid choice: ";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin >> choice ;
+            cin >> choice;
         }
-        cout << endl ;
+        cout << endl;
 
         switch (choice) {
             case 1:
-                 cout << "Please, enter number of guests you want to Add: ";
-                 cin >> numOfGuests;
+                cout << "Please, enter number of guests you want to Add: ";
+                cin >> numOfGuests;
 
-                 while (cin.fail() || numOfGuests < 1) {
-                     cout << "Invalid Input, \n Please, enter valid number : ";
-                     cin.clear();
-                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                     cin >> numOfGuests;
-                 }
-                 cin.ignore();
-
-                 for (int i = 0; i < numOfGuests; i++) {
-                    cout << "Please, enter name of guest " << i + 1 << " : " ; getline(cin, name) ;
-                    cout << "Please, enter contact (email or phone number) of guest " << i + 1<< " : "; getline(cin, contact) ;
-                    cout << "Please, enter invitation date (YYYY-MM-DD) of guest " << i + 1<< " : " ; getline(cin, date);
-
-                    auto Add_Guest = Guest(name, contact , date);
-                    manager.add_guest(Add_Guest);
-                    cout << endl ;
+                while (cin.fail() || numOfGuests < 1) {
+                    cout << "Invalid Input, \n Please, enter valid number : ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin >> numOfGuests;
                 }
-                break ;
+                cin.ignore();
+
+                for (int i = 0; i < numOfGuests; i++) {
+                    cout << "Please, enter name of guest " << i + 1 << " : ";
+                    getline(cin, name);
+                    cout << "Please, enter contact (email or phone number) of guest " << i + 1 << " : ";
+                    getline(cin, contact);
+                    cout << "Please, enter invitation date (YYYY-MM-DD) of guest " << i + 1 << " : ";
+                    getline(cin, date);
+
+                    auto Add_Guest = Guest(name, contact, date);
+                    manager.add_guest(Add_Guest);
+                    cout << endl;
+                }
+                break;
 
             case 2:
                 cout << "Please, enter number of guests you want to remove: ";
@@ -418,40 +451,105 @@ int main() {
                 cin.ignore();
 
                 for (int i = 0; i < numOfGuests; i++) {
-                    cout << "Please, enter name of guest " << i + 1 << " : " ; getline(cin, name) ;
-                    cout << "Please, enter contact (email or phone number) of guest " << i + 1 << " : "; getline(cin, contact) ;
-                    cout << "Please, enter invitation date (YYYY-MM-DD) of guest " << i + 1 << " : " ; getline(cin, date);
+                    cout << "Please, enter name of guest " << i + 1 << " : ";
+                    getline(cin, name);
+                    cout << "Please, enter contact (email or phone number) of guest " << i + 1 << " : ";
+                    getline(cin, contact);
+                    cout << "Please, enter invitation date (YYYY-MM-DD) of guest " << i + 1 << " : ";
+                    getline(cin, date);
 
-                    auto const  Remove_Guest = Guest(name, contact , date);
+                    auto const Remove_Guest = Guest(name, contact, date);
                     manager.remove_guest(Remove_Guest);
-                    cout << endl ;
+                    cout << endl;
                 }
-                break ;
+                break;
 
             case 3:
                 cin.ignore();
-                cout << "Please, enter name of guest: " ; getline(cin, guestName) ;
-                cout << "Please, enter new invitation date (YYYY-MM-DD): " ; getline(cin, new_date) ;
+                cout << "Please, enter name of guest: ";
+                getline(cin, guestName);
+                cout << "Please, enter new invitation date (YYYY-MM-DD): ";
+                getline(cin, new_date);
 
-                manager.update_guest_invitation( guestName, new_date);
-                break ;
+                manager.update_guest_invitation(guestName, new_date);
+                break;
 
             case 4:
                 cin.ignore();
-                cout << "Please, enter date you want to send reminder message to all guests on this date: " ; getline(cin, reminder);
-                manager.send_reminder( reminder);
-                break ;
+                cout << "Please, enter date you want to send reminder message to all guests on this date: ";
+                getline(cin, reminder);
+                manager.send_reminder(reminder);
+                break;
 
             case 5:
                 manager.display_all_guests();
-                break ;
+                break;
 
             case 6:
-                cout << " ----- Thanks for using this Iftar Invitation Manager ----- "<< endl;
+                cout << " ----- Thanks for using this Iftar Invitation Manager ----- " << endl;
                 exit(0);
 
             default:
                 cout << "Invalid choice, \n Please, enter valid choice: ";
         }
     }
+}
+
+void initializeInMAin() {
+    cout << endl;
+
+    // Create Iftar Manager
+    IftarManager manager = IftarManager();
+
+    // Add guests
+    Guest guest1 = Guest("Aisha", "aisha@example.com", "2025-03-15");
+    Guest guest2 = Guest("Omar", "omar@example.com", "2025-03-18");
+    Guest guest3 = Guest("Zainab", "zainab@example.com", "2025-03-20");
+
+    manager.add_guest(guest1);
+    manager.add_guest(guest2);
+    manager.add_guest(guest3);
+
+    // Display guest list
+    manager.display_all_guests();
+
+    // Update invitation date for Omar
+    manager.update_guest_invitation("Omar", "2025-03-15");
+
+    // Display updated guest lis
+    manager.display_all_guests();
+
+    // Send reminders
+    manager.send_reminder("2025-03-15");
+}
+
+// ----------------------------------------------- MAIN FUNCTION
+
+int main() {
+    cout << endl << " ------------------  Welcome to Iftar Invitation Manager ------------------" << endl;
+
+    string choice;
+    while (true) {
+        while (true) {
+            cout << "\nWhat do you want to do?" << endl;
+            cout << "1) Run From Terminal." << endl;
+            cout << "2) Initialize in main." << endl;
+            cout << "3) Exit." << endl;
+            cout << "Please, enter your choice:";
+            getline(cin, choice);
+
+            // Check the validity of input.
+            if (choice == "1" || choice == "2" || choice == "3") break;
+            cout << "Invalid choice. Please, Try again." << endl;
+        }
+
+        // Run from the terminal.
+        if (choice == "1") runFromTerminal();
+
+            // Initialize in main.
+        else if (choice == "2") initializeInMAin();
+        else break;
+    }
+
+    cout << "\n----- Thank you for using our system! Goodbye! -----" << endl;
 }

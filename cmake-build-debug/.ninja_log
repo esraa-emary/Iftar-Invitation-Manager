@@ -1,4 +1,19 @@
 # ninja log v5
-1	2110	7630619965930230	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
-5	2217	7630628503400921	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
-2217	2488	7630628506008708	Iftar_Invitation_Manager.exe	b8641815a654b547
+0	6859	7645260736463717	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+6868	8989	7645260757861939	Iftar_Invitation_Manager.exe	b8641815a654b547
+9	7216	7645314080605482	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+7217	9453	7645314103066814	Iftar_Invitation_Manager.exe	b8641815a654b547
+5	8265	7645315172880414	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+8266	10403	7645315194354908	Iftar_Invitation_Manager.exe	b8641815a654b547
+6	6426	7645320836642992	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+6426	8508	7645320857552190	Iftar_Invitation_Manager.exe	b8641815a654b547
+4	5281	7645322324831981	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+5281	7366	7645322345753540	Iftar_Invitation_Manager.exe	b8641815a654b547
+5	5064	7645322773601523	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+5065	7561	7645322798718920	Iftar_Invitation_Manager.exe	b8641815a654b547
+5	8323	7645330214628537	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+8323	10409	7645330235584942	Iftar_Invitation_Manager.exe	b8641815a654b547
+5	6190	7645330465122315	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+6190	8266	7645330485992073	Iftar_Invitation_Manager.exe	b8641815a654b547
+6	6737	7645332569962030	CMakeFiles/Iftar_Invitation_Manager.dir/Iftar-Invitation-Manager.cpp.obj	ee868cd564f4226a
+6737	8889	7645332591560949	Iftar_Invitation_Manager.exe	b8641815a654b547
