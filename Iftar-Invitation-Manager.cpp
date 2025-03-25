@@ -344,7 +344,7 @@ void IftarManager::remove_guest(const string &name) {
     while (true) {
         temp_ind = 0;
         for (int i = 0; i < this->no_guests; i++) {
-            if (guestList[i].getName() == name) {
+            if (guestList[i].getName() == name && !found) {
                 found = true;
             }
             else if (temp_ind < this->no_guests - 1) {
@@ -380,7 +380,7 @@ void runFromTerminal() {
         long long numOfGuests;
         int choice;
 
-        cout << "1) Add new guest." << endl;
+        cout << "\n1) Add new guest." << endl;
         cout << "2) Remove guest." << endl;
         cout << "3) Update Guest Invitation." << endl;
         cout << "4) Send Reminder." << endl;
