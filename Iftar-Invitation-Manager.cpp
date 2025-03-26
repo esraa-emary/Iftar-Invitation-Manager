@@ -467,8 +467,8 @@ void runFromTerminal() {
                 break;
 
             case 6:
-                cout << " ----- Thanks for using this Iftar Invitation Manager ----- " << endl;
-                exit(0);
+                cin.ignore();
+                return;
 
             default:
                 cout << "Invalid choice, \n Please, enter valid choice: ";
@@ -479,6 +479,8 @@ void runFromTerminal() {
 void initializeInMAin() {
     cout << endl;
 
+    // ----------------------------------------------- TEST 1
+    cout << "// ----------------------------------------------- TEST 1\n\n";
     // Create Iftar Manager
     IftarManager manager = IftarManager();
 
@@ -502,6 +504,66 @@ void initializeInMAin() {
 
     // Send reminders
     manager.send_reminder("2025-03-15");
+
+
+    // ----------------------------------------------- TEST 2
+    cout << "\n// ----------------------------------------------- TEST 2\n\n";
+    // Create Iftar Manager
+    IftarManager manager2 = IftarManager();
+
+    // Add guests
+    Guest guest4 = Guest("mona", "mona@gmail.com", "2025-03-22");
+    Guest guest5 = Guest("ahmed", "ahmed@yahoo.com", "2025-03-25");
+    Guest guest6 = Guest("esraa", "01123456789", "2025-03-20");
+
+    manager2.add_guest(guest4);
+    manager2.add_guest(guest5);
+    manager2.add_guest(guest6);
+
+    // Display guest list
+    manager2.display_all_guests();
+
+    // Update invitation date for Omar
+    manager2.update_guest_invitation("mona", "2025-03-20");
+
+    // Display updated guest lis
+    manager2.display_all_guests();
+
+    // Send reminders
+    manager2.send_reminder("2025-03-20");
+
+    // Delete guest
+    manager2.remove_guest("ahmed");
+
+
+    // ----------------------------------------------- TEST 3
+    cout << "\n// ----------------------------------------------- TEST 3\n\n";
+    // Create Iftar Manager
+    IftarManager manager3 = IftarManager();
+
+    // Add guests
+    Guest guest7 = Guest("john", "john@outlook.com", "2025-03-22");
+    Guest guest8 = Guest("mohammed", "mohammed@hotmail.com", "2025-03-25");
+    Guest guest9 = Guest("george", "01123456789", "2025-03-20");
+
+    manager3.add_guest(guest7);
+    manager3.add_guest(guest8);
+    manager3.add_guest(guest9);
+
+    // Display guest list
+    manager3.display_all_guests();
+
+    // Update invitation date for Omar
+    manager3.update_guest_invitation("george", "2025-03-22");
+
+    // Display updated guest lis
+    manager3.display_all_guests();
+
+    // Send reminders
+    manager3.send_reminder("2025-03-22");
+
+    // Delete guest
+    manager3.remove_guest("george");
 }
 
 // ----------------------------------------------- MAIN FUNCTION
