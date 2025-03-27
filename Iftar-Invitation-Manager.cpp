@@ -32,7 +32,7 @@ bool isValidName(const string &name) {
 bool isValidContact(const string &contact) {
     // Regular expressions for the phone number and email formats respectively.
     const regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
-    const regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail|example)\\.com$");
+    const regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
     return regex_match(contact, emailPattern) || regex_match(contact, phoneNumberPattern);
 }
 
@@ -66,14 +66,19 @@ class Guest {
 
 public:
     Guest() = default;
+
     Guest(string guestName, string guestContact, string guestIftar_date);
 
     void display_guest() const;
+
     void update_invitation(const string &new_date);
 
     // getters.
     string getName();
+
     string getDate();
+
+    string getMail();
 
     // operator overloading.
     bool operator<(Guest &other);
@@ -86,16 +91,22 @@ class IftarManager {
     int no_guests = 0;
 
     void Merge(Guest *Guest_List_sort, int Right, int Middle, int Left);
+
     void Help_Merge_sorting(Guest *Temp, int Left, int Right);
 
 public:
     ~IftarManager();
+
     void add_guest(const Guest &guest);
+
     void remove_guest(const string &name);
 
     void display_all_guests() const;
+
     void update_guest_invitation(string name, string new_date);
+
     void send_reminder(string date) const;
+
     void sort_guest_list();
 };
 
@@ -149,6 +160,10 @@ string Guest::getName() {
 
 string Guest::getDate() {
     return this->iftar_date;
+}
+
+string Guest::getMail() {
+    return this->contact;
 }
 
 // ---------------------------------------------- DISPLAY GUEST FUNCTION
@@ -253,7 +268,8 @@ void IftarManager::update_guest_invitation(string name, string new_date) {
 // ----------------------------------------------- SEND REMINDER FUNCTION
 
 void IftarManager::send_reminder(string date) const {
-    while (true) {
+    int retry_count = 3; // Prevent infinite loop
+    while (retry_count--) {
         if (isValidDate(date)) {
             bool found = false;
             cout << "Sending Reminder..." << endl;
@@ -261,18 +277,75 @@ void IftarManager::send_reminder(string date) const {
             for (int i = 0; i < this->no_guests; i++) {
                 if (this->guestList[i].getDate() == date) {
                     found = true;
-                    cout << "Reminder sent to " << guestList[i].getName() << ": Your Iftar invitation is on "
-                         << date << "!" << endl;
+                    const regex emailPattern(
+                            "^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$", regex_constants::icase);
+
+                    if (regex_match(guestList[i].getMail(), emailPattern)) {
+                        string guest_name = guestList[i].getName();
+                        string api_key_public = "db50e3d92c0c72ac9296163768e4b994";
+                        string api_key_private = "be920e0b4089be96d539f7b250324d97";
+                        string to_email = guestList[i].getMail();
+                        string from_email = "fcaicu.assignments@gmail.com";
+                        string subject = "Reminder for Iftar Invitation on " + date;
+
+                        string message_body = "Dear " + guest_name + ", Your Iftar invitation is on " + date +
+                                              ". Looking forward to seeing you! Best regards, Iftar Manager";
+
+
+                        string json_payload = "{"
+                                              "\"Messages\":[{"
+                                              "\"From\":{"
+                                              "\"Email\":\"" + from_email + "\","
+                                                                            "\"Name\":\"" + "Fake Mail" + "\""
+                                                                                                          "},"
+                                                                                                          "\"To\":[{"
+                                                                                                          "\"Email\":\"" +
+                                              to_email + "\","
+                                                         "\"Name\":\"" + guest_name + "\""
+                                                                                      "}],"
+                                                                                      "\"Subject\":\"" + subject + "\","
+                                                                                                                   "\"TextPart\":\"" +
+                                              message_body + "\""
+                                                             "}]"
+                                                             "}";
+
+                        string escaped_payload;
+                        for (char c: json_payload) {
+                            if (c == '"') escaped_payload += "\\\"";
+                            else if (c == '\\') escaped_payload += "\\\\";
+                            else escaped_payload += c;
+                        }
+
+                        string curl_command = "curl -X POST https://api.mailjet.com/v3.1/send "
+                                              "-H \"Content-Type: application/json\" "
+                                              "-u \"" + api_key_public + ":" + api_key_private + "\" "
+                                                                                                 "-d \"" +
+                                              escaped_payload + "\"";
+
+                        cout << "\nSending reminder to " << to_email << "..." << endl;
+                        system(curl_command.c_str());
+                    }
+
+                    cout << "Reminder sent to " << guestList[i].getName()
+                         << ": Your Iftar invitation is on " << date << "!" << endl;
                 }
             }
+
             if (!found) {
-                cout << "No Guest has this Iftar date " << endl << endl;
+                cout << "No Guest has this Iftar date." << endl;
             }
-            break;
+
+            return; // Exit the function after processing
         }
-        cout << "Please enter a valid date : ";
-        getline(cin, date);
+
+        if (retry_count > 0) {
+            cout << "Please enter a valid date: ";
+            getline(cin, date);
+        } else {
+            cout << "Too many invalid attempts. Exiting reminder function." << endl;
+        }
     }
+
     cout << "\nMay your Iftar gatherings be full of warmth and blessings!" << endl;
 }
 
@@ -346,15 +419,14 @@ void IftarManager::remove_guest(const string &name) {
         for (int i = 0; i < this->no_guests; i++) {
             if (guestList[i].getName() == name && !found) {
                 found = true;
-            }
-            else if (temp_ind < this->no_guests - 1) {
+            } else if (temp_ind < this->no_guests - 1) {
                 Temp_list[temp_ind++] = this->guestList[i];
             }
         }
 
         if (found) break;
         cout << "Guest Not Found in Iftar invitation list !" << endl;
-        delete [] Temp_list;
+        delete[] Temp_list;
         return;
     }
 
@@ -485,9 +557,9 @@ void initializeInMAin() {
     IftarManager manager = IftarManager();
 
     // Add guests
-    Guest guest1 = Guest("Aisha", "aisha@example.com", "2025-03-15");
-    Guest guest2 = Guest("Omar", "omar@example.com", "2025-03-18");
-    Guest guest3 = Guest("Zainab", "zainab@example.com", "2025-03-20");
+    Guest guest1 = Guest("Aisha", "aisha@gmail.com", "2025-03-15");
+    Guest guest2 = Guest("Omar", "omar@gmail.com", "2025-03-18");
+    Guest guest3 = Guest("Zainab", "zainab@gmail.com", "2025-03-20");
 
     manager.add_guest(guest1);
     manager.add_guest(guest2);
@@ -589,10 +661,10 @@ int main() {
         // Run from the terminal.
         if (choice == "1") runFromTerminal();
 
-        // Initialize in main.
+            // Initialize in main.
         else if (choice == "2") initializeInMAin();
         else break;
     }
 
-    cout << "\n----- Thank you for using our system! Goodbye! -----"<<endl;
+    cout << "\n----- Thank you for using our system! Goodbye! -----" << endl;
 }
