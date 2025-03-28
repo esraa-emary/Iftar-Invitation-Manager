@@ -17,45 +17,17 @@
 
 using namespace std;
 
+// ----------------------------------------------- Prototype of the helper function
+
+bool is_PositiveInt(const string &str);
+bool isValidDate(const string &date) ;
+bool isValidContact(const string &contact);
+bool isValidName(const string &name);
+
 // ----------------------------------------------- CURRENT DATE
 
 const string current_date = "2025-03-24";
 
-// ----------------------------------------------- HELPER FUNCTIONS
-
-bool isValidName(const string &name) {
-    // Regular expression for the name format (only letters and spaces).
-    const regex namePattern("[A-Za-z ]+$");
-    return regex_match(name, namePattern);
-}
-
-bool isValidContact(const string &contact) {
-    // Regular expressions for the phone number and email formats respectively.
-    const regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
-    const regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
-    return regex_match(contact, emailPattern) || regex_match(contact, phoneNumberPattern);
-}
-
-bool isValidDate(const string &date) {
-    // Regular expression for the date format (YYYY-MM-DD).
-    const regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
-
-    if (regex_match(date, datePattern)) {
-        // Last day of every month in a non-leap year (Note: The array is 1-based).
-        int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        // Extract year, month, and day from the date string.
-        const int year = stoi(date.substr(0, 4));
-        const int month = stoi(date.substr(5, 2));
-        const int day = stoi(date.substr(8, 2));
-
-        // Adjust February for leap years.
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) daysInMonth[2] = 29;
-
-        if (day <= daysInMonth[month]) return true;
-    }
-    return false;
-}
 
 // ----------------------------------------------- GUEST CLASS
 
@@ -448,9 +420,8 @@ IftarManager::~IftarManager() {
 void runFromTerminal() {
     IftarManager manager = IftarManager();
     while (true) {
-        string name, date, contact, guestName, new_date, reminder;
-        long long numOfGuests;
-        int choice;
+        string name, numOfGuests ,choice;
+        long long numofGuests  ;
 
         cout << "\n1) Add new guest." << endl;
         cout << "2) Remove guest." << endl;
@@ -459,91 +430,79 @@ void runFromTerminal() {
         cout << "5) Display All Guest List." << endl;
         cout << "6) Exit." << endl;
 
-        cout << endl << "Please, Select an option:";
-        cin >> choice;
+        cout << endl << "Please, Select an option : ";
+        getline(cin , choice);
 
-        while (cin.fail() || choice < 1 || choice > 6) {
+        while ( choice != "1" &&  choice != "2" && choice != "3" && choice !="4" && choice !="5" && choice !="6" ){
             cout << "Invalid choice, \nPlease, enter valid choice: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin >> choice;
+            getline(cin , choice);
         }
         cout << endl;
 
-        switch (choice) {
-            case 1:
-                cout << "Please, enter number of guests you want to Add: ";
-                cin >> numOfGuests;
+        if (choice == "1") {
+            string contact , date;
+            cout << "Please, enter number of guests you want to Add : ";
+            getline(cin , numOfGuests);
 
-                while (cin.fail() || numOfGuests < 1) {
-                    cout << "Invalid Input, \n Please, enter valid number : ";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cin >> numOfGuests;
-                }
-                cin.ignore();
+            while (!is_PositiveInt(numOfGuests)) {
+                cout << "Invalid Input, \n Please, enter valid number : ";
+                getline(cin , numOfGuests);
+            }
 
-                for (int i = 0; i < numOfGuests; i++) {
-                    cout << "Please, enter name of guest " << i + 1 << " : ";
-                    getline(cin, name);
-                    cout << "Please, enter contact (email or phone number) of guest " << i + 1 << " : ";
-                    getline(cin, contact);
-                    cout << "Please, enter invitation date (YYYY-MM-DD) of guest " << i + 1 << " : ";
-                    getline(cin, date);
+             numofGuests = stoll(numOfGuests);
 
-                    auto Add_Guest = Guest(name, contact, date);
-                    manager.add_guest(Add_Guest);
-                    cout << endl;
-                }
-                break;
+            for (int i = 0; i < numofGuests; i++) {
+                cout << "Please, enter name of guest " << i + 1 << " : ";
+                getline(cin, name);
 
-            case 2:
-                cout << "Please, enter number of guests you want to remove: ";
-                cin >> numOfGuests;
+                cout << "Please, enter contact (email or phone number) of guest " << i + 1 << " : ";
+                getline(cin, contact);
+                
+                cout << "Please, enter invitation date (YYYY-MM-DD) of guest " << i + 1 << " : ";
+                getline(cin, date);
 
-                while (cin.fail() || numOfGuests < 1) {
-                    cout << "Invalid Input, \n Please, enter valid number: ";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cin >> numOfGuests;
-                }
-                cin.ignore();
+                auto Add_Guest = Guest(name, contact, date);
+                manager.add_guest(Add_Guest);
+                cout << endl;
+            }
+        }else if (choice == "2") {
 
-                for (int i = 0; i < numOfGuests; i++) {
-                    cout << "Please, enter name of guest " << i + 1 << " : ";
-                    getline(cin, name);
-                    manager.remove_guest(name);
-                    cout << endl;
-                }
-                break;
+            cout << "Please, enter number of guests you want to remove: ";
+            getline(cin , numOfGuests);
 
-            case 3:
-                cin.ignore();
-                cout << "Please, enter name of guest: ";
-                getline(cin, guestName);
-                cout << "Please, enter new invitation date (YYYY-MM-DD): ";
-                getline(cin, new_date);
+            while (!is_PositiveInt(numOfGuests)) {
+                cout << "Invalid Input, \n Please, enter valid number : ";
+                getline(cin , numOfGuests);
+            }
 
-                manager.update_guest_invitation(guestName, new_date);
-                break;
+            for (int i = 0; i < numofGuests; i++) {
+                cout << "Please, enter name of guest " << i + 1 << " : ";
+                getline(cin, name);
+                manager.remove_guest(name);
+                cout << endl;
+            }
 
-            case 4:
-                cin.ignore();
-                cout << "Please, enter date you want to send reminder message to all guests on this date: ";
-                getline(cin, reminder);
-                manager.send_reminder(reminder);
-                break;
+        }else if (choice == "3") {
+            string new_date , guestName;
 
-            case 5:
-                manager.display_all_guests();
-                break;
+            cout << "Please, enter name of guest: ";
+            getline(cin, guestName);
+            cout << "Please, enter new invitation date (YYYY-MM-DD): ";
+            getline(cin, new_date);
 
-            case 6:
-                cin.ignore();
-                return;
+            manager.update_guest_invitation(guestName, new_date);
 
-            default:
-                cout << "Invalid choice, \n Please, enter valid choice: ";
+        }else if (choice == "4") {
+            string reminder;
+            cout << "Please, enter date you want to send reminder message to all guests on this date: ";
+            getline(cin, reminder);
+            manager.send_reminder(reminder);
+
+        }else if (choice == "5") {
+            manager.display_all_guests();
+
+        }else if (choice == "6") {
+            return;
         }
     }
 }
@@ -650,7 +609,7 @@ int main() {
             cout << "1) Run From Terminal." << endl;
             cout << "2) Initialize in main." << endl;
             cout << "3) Exit." << endl;
-            cout << "Please, enter your choice:";
+            cout << "\nPlease, enter your choice : ";
             getline(cin, choice);
 
             // Check the validity of input.
@@ -667,4 +626,44 @@ int main() {
     }
 
     cout << "\n----- Thank you for using our system! Goodbye! -----" << endl;
+}
+// ----------------------------------------------- HELPER FUNCTIONS
+
+bool isValidName(const string &name) {
+    // Regular expression for the name format (only letters and spaces).
+    const regex namePattern("[A-Za-z ]+$");
+    return regex_match(name, namePattern);
+}
+
+bool isValidContact(const string &contact) {
+    // Regular expressions for the phone number and email formats respectively.
+    const regex phoneNumberPattern("(010|011|012|015)\\d{8}$");
+    const regex emailPattern("^[A-Za-z0-9][A-Za-z0-9._-]*@(gmail|yahoo|outlook|hotmail)\\.com$");
+    return regex_match(contact, emailPattern) || regex_match(contact, phoneNumberPattern);
+}
+
+bool isValidDate(const string &date) {
+    // Regular expression for the date format (YYYY-MM-DD).
+    const regex datePattern("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$");
+
+    if (regex_match(date, datePattern)) {
+        // Last day of every month in a non-leap year (Note: The array is 1-based).
+        int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        // Extract year, month, and day from the date string.
+        const int year = stoi(date.substr(0, 4));
+        const int month = stoi(date.substr(5, 2));
+        const int day = stoi(date.substr(8, 2));
+
+        // Adjust February for leap years.
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) daysInMonth[2] = 29;
+
+        if (day <= daysInMonth[month]) return true;
+    }
+    return false;
+}
+
+bool is_PositiveInt(const string &str) {
+    static const regex positiveIntegerPattern(R"(^[1-9]\d*$)");
+    return regex_match(str, positiveIntegerPattern);
 }
